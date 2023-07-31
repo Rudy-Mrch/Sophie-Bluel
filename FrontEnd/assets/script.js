@@ -7,7 +7,7 @@ let categories = []; // Données des catégories
 let originalWorks = []; // Données d'origine des travaux
 
 // Fonction pour charger les données des travaux depuis l'API
-function  l oadWork() {
+function  loadWork() {
   // Appel à l'API pour récupérer les données des travaux
   fetch(root + "/works")
     .then((response) => {
@@ -27,9 +27,14 @@ function displayWork() {
   const gallery = document.querySelector(".gallery");
   gallery.innerHTML = ""; // Réinitialiser le contenu pour éviter les doublons
 
+// works.forEach(work => {
+// });
+
   // Parcourir les données des travaux et créer des éléments HTML pour chaque travail
   for (let i = 0; i < works.length; i++) {
     const work = works[i];
+
+  
 
     const fig = document.createElement("figure");
     const imageS = document.createElement("img");
@@ -71,7 +76,7 @@ function displayCategories() {
   // Ajouter un gestionnaire d'événements de clic au bouton "Tous"
   allBtn.addEventListener("click", () => {
     console.log("Tous!");
-    filterWorksByCategoryId(false); // Filtrer les travaux en affichant tous les travaux (aucun filtre)
+    filterWorksByCategoryId(); // Filtrer les travaux en affichant tous les travaux (aucun filtre)
 
     // Supprimer la classe "active" de tous les boutons
     const allButtons = document.querySelectorAll(".filterBtn");
@@ -109,7 +114,8 @@ function displayCategories() {
 
 // Fonction pour filtrer les travaux par categoryId
 function filterWorksByCategoryId(categoryId) {
-  if (categoryId === false) {
+  // works = categoryId === undefined ? originalWorks : originalWorks.filter((work) => work.categoryId === categoryId);
+  if (categoryId === undefined) {
     works = originalWorks; // Afficher tous les travaux (aucun filtre)
   } else {
     works = originalWorks.filter((work) => work.categoryId === categoryId);
@@ -119,3 +125,4 @@ function filterWorksByCategoryId(categoryId) {
 
 // Charger les données depuis l'API lors du chargement de la page
 loadWork();
+
