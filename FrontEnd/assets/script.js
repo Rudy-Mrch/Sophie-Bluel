@@ -1,22 +1,15 @@
-// L'URL de base de l'API
 const root = "http://localhost:5678/api";
-
-// Tableaux pour stocker les données
-let works = []; // Données des travaux
-let categories = []; // Données des catégories
-let originalWorks = []; // Données d'origine des travaux
+let works = [];
+let categories = [];
+let originalWorks = [];
 
 // Fonction pour charger les données des travaux depuis l'API
-function  loadWork() {
-  // Appel à l'API pour récupérer les données des travaux
+function loadWork() {
   fetch(root + "/works")
-    .then((response) => {
-      return response.json(); // Convertir la réponse en JSON
-    })
+    .then((response) => response.json()) // Convertir la réponse en JSON
     .then((worksData) => {
       works = worksData; // Stocker les données des travaux
       originalWorks = worksData; // Sauvegarder les données d'origine des travaux
-      console.log(works);
       displayWork(); // Afficher les travaux à l'écran
       loadCategories(); // Charger les catégories après avoir récupéré les travaux
     });
@@ -27,15 +20,9 @@ function displayWork() {
   const gallery = document.querySelector(".gallery");
   gallery.innerHTML = ""; // Réinitialiser le contenu pour éviter les doublons
 
-// works.forEach(work => {
-// });
-
   // Parcourir les données des travaux et créer des éléments HTML pour chaque travail
   for (let i = 0; i < works.length; i++) {
     const work = works[i];
-
-  
-
     const fig = document.createElement("figure");
     const imageS = document.createElement("img");
     imageS.src = work.imageUrl;
@@ -50,14 +37,10 @@ function displayWork() {
 
 // Fonction pour charger les données des catégories depuis l'API
 function loadCategories() {
-  // Appel à l'API pour récupérer les données des catégories
   fetch(root + "/categories")
-    .then((response) => {
-      return response.json(); // Convertir la réponse en JSON
-    })
+    .then((response) => response.json()) // Convertir la réponse en JSON
     .then((categoriesData) => {
       categories = categoriesData; // Stocker les données des catégories
-      console.log(categories);
       displayCategories(); // Afficher les catégories sous forme de boutons à l'écran
     });
 }
@@ -75,7 +58,6 @@ function displayCategories() {
 
   // Ajouter un gestionnaire d'événements de clic au bouton "Tous"
   allBtn.addEventListener("click", () => {
-    console.log("Tous!");
     filterWorksByCategoryId(); // Filtrer les travaux en affichant tous les travaux (aucun filtre)
 
     // Supprimer la classe "active" de tous les boutons
@@ -96,8 +78,8 @@ function displayCategories() {
     btn.classList.add("filterBtn");
     buttonFilter.appendChild(btn);
 
+    // Ajouter un gestionnaire d'événements de clic à chaque bouton de catégorie
     btn.addEventListener("click", () => {
-      console.log(`${category.name} !`);
       filterWorksByCategoryId(category.id); // Filtrer les travaux par catégorie en fonction de l'ID de la catégorie
 
       // Supprimer la classe "active" de tous les boutons
@@ -114,10 +96,11 @@ function displayCategories() {
 
 // Fonction pour filtrer les travaux par categoryId
 function filterWorksByCategoryId(categoryId) {
-  // works = categoryId === undefined ? originalWorks : originalWorks.filter((work) => work.categoryId === categoryId);
+  // Si categoryId est undefined, afficher tous les travaux (aucun filtre)
   if (categoryId === undefined) {
-    works = originalWorks; // Afficher tous les travaux (aucun filtre)
+    works = originalWorks;
   } else {
+    // Filtrer les travaux pour n'afficher que ceux qui correspondent à la categoryId donnée
     works = originalWorks.filter((work) => work.categoryId === categoryId);
   }
   displayWork(); // Afficher les travaux filtrés à l'écran
@@ -125,4 +108,40 @@ function filterWorksByCategoryId(categoryId) {
 
 // Charger les données depuis l'API lors du chargement de la page
 loadWork();
+
+// Fonction pour vérifier l'état de connexion
+function checkConnexion() {
+  const token = sessionStorage.getItem("token");
+  if (token !== null) {
+    alert("Mode éditeur activé");
+  } else {
+    alert("Mode éditeur désactivé");
+  }
+}
+
+// function pour afficher le mode editeur
+function barEdition() {
+  const editionGlobal = document.querySelector("#editionBar");
+  editionGlobal.classList.add("edition_global");
+
+  const logoEdit = document.querySelector("#logoEdit");
+  logoEdit.style.marginRight = "0.3em";
+  logoEdit.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>';
+
+  const edition1 = document.querySelector("#barEdit1");
+  edition1.innerText = "Mode édition";
+  edition1.classList.add("edition1");
+
+  const edition2 = document.querySelector("#barEdit2");
+  edition2.innerText = "publier les changements";
+  edition2.classList.add("edition2");
+
+  const modify1 = document.querySelector("#modify1");
+  modify1.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  modify1.classList.add("modify1");
+
+  const modify2 = document.querySelector("#modify2");
+  modify2.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  modify2.classList.add("modify2");
+}
 

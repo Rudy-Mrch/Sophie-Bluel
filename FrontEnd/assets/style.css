@@ -321,13 +321,54 @@ footer nav ul {
 .filterBtn.active {
 	background-color: #1D6154;
 	color: white;
-  }
+}
 
-  #log{
-	color:black;
+#log {
+	color: black;
 	text-decoration: none;
-  }
+}
 
-  #log:hover{
+#log:hover {
 	color: #B1663C;
-  }
+}
+
+
+.edition_global {
+	background-color: rgb(0, 0, 0);
+	color: rgb(255, 255, 255);
+	padding: 1.5em;
+	text-align: center;
+	margin-left: -11em;
+	margin-right: -11em;
+
+}
+
+.edition1 {
+	color: white;
+	margin-right: 1em;
+}
+
+.edition2 {
+	color: black;
+	background-color: white;
+	padding: 0.7em 1.5em 0.7em 1.5em;
+	border-radius: 60px;
+}
+
+.modify1 {
+	display: block;
+	margin-left: 4em;
+	margin-top: 1em;
+}
+
+.modify2 {
+	font-size: 14px;
+	font-family: 'Work Sans';
+	color: black;
+	padding-left: 1em;
+}
+
+.modify1:hover,
+.modify2:hover {
+	color: #B1663C;
+}
