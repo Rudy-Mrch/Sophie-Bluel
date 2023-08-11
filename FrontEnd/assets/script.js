@@ -1,26 +1,90 @@
+// LES VARIABLES
+const openModal1Button = document.getElementById("modify2");
+const modal1 = document.getElementById("modal1");
+const closeModal1Button = document.getElementById("closeModal1");
+const addPhotosButton = document.getElementById("addPhotos");
+const deleteGalleryButton = document.getElementById("deleteGallery");
+
+const modal2 = document.getElementById("modal2");
+const closeModal2Button = document.getElementById("closeModal2");
+const validatePhotoButton = document.getElementById("validatePhoto");
+
+// Clique sur pour ouvrir la première modale
+openModal1Button.addEventListener("click", () => {
+  modal1.style.display = "block";
+});
+
+// Clique sur le bouton pour ajouter des photos (modal2)
+addPhotosButton.addEventListener("click", () => {
+  modal2.style.display = "block";
+});
+
+// Clique pour supprimer la galerie
+deleteGalleryButton.addEventListener("click", () => {
+   // A COMPLETERRRRRRRRRRRRR  POUR SUPPRIMER LA GALERIE !!!!!!!!!!!!!!!!!!!!!!!
+});
+
+// Valider l'ajout de la photo
+validatePhotoButton.addEventListener("click", () => {
+  // A COMPLETERRRRRRRRRRRRR  POUR VALIDER LA PHOTO !!!!!!!!!!!!!!!!!!!!!!!
+});
+
+// Fermeture de la modal1
+closeModal1Button.addEventListener("click", () => {
+  modal1.style.display = "none";
+});
+
+//  Fermture de la modal2
+closeModal2Button.addEventListener("click", () => {
+  modal2.style.display = "none";
+});
+
+// Clique en dehors = modal1 fermé
+modal1.addEventListener("click", (event) => {
+  if (event.target === modal1) {
+    modal1.style.display = "none";
+  }
+});
+
+// Clique en dehors = modal2 fermé
+modal2.addEventListener("click", (event) => {
+  if (event.target === modal2) {
+    modal2.style.display = "none";
+  }
+});
+
+// Button back pour la modal2
+const arrowBackButton = document.getElementById("arrowBack");
+arrowBackButton.addEventListener("click", () => {
+  modal2.style.display = "none";
+  modal1.style.display = "block";
+});
+
+// Variable pour les appels à l'API
 const root = "http://localhost:5678/api";
+
+// Tableaux pour stocker les données des œuvres et des catégories
 let works = [];
 let categories = [];
 let originalWorks = [];
 
-// Fonction pour charger les données des travaux depuis l'API
+// Charger les données des œuvres depuis l'API
 function loadWork() {
   fetch(root + "/works")
-    .then((response) => response.json()) // Convertir la réponse en JSON
+    .then((response) => response.json())
     .then((worksData) => {
-      works = worksData; // Stocker les données des travaux
-      originalWorks = worksData; // Sauvegarder les données d'origine des travaux
-      displayWork(); // Afficher les travaux à l'écran
-      loadCategories(); // Charger les catégories après avoir récupéré les travaux
+      works = worksData;
+      originalWorks = worksData;
+      displayWork();
+      loadCategories();
     });
 }
 
-// Fonction pour afficher les travaux à l'écran
+// Afficher les travaux dans la galerie
 function displayWork() {
   const gallery = document.querySelector(".gallery");
-  gallery.innerHTML = ""; // Réinitialiser le contenu pour éviter les doublons
+  gallery.innerHTML = "";
 
-  // Parcourir les données des travaux et créer des éléments HTML pour chaque travail
   for (let i = 0; i < works.length; i++) {
     const work = works[i];
     const fig = document.createElement("figure");
@@ -35,42 +99,37 @@ function displayWork() {
   }
 }
 
-// Fonction pour charger les données des catégories depuis l'API
+// Charger les catégories depuis l'API
 function loadCategories() {
   fetch(root + "/categories")
-    .then((response) => response.json()) // Convertir la réponse en JSON
+    .then((response) => response.json())
     .then((categoriesData) => {
-      categories = categoriesData; // Stocker les données des catégories
-      displayCategories(); // Afficher les catégories sous forme de boutons à l'écran
+      categories = categoriesData;
+      displayCategories();
     });
 }
 
-// Fonction pour afficher les catégories sous forme de boutons à l'écran
+// Afficher les boutons de filtre par catégorie
 function displayCategories() {
   const buttonFilter = document.querySelector(".buttonFilter");
-  buttonFilter.innerHTML = ""; // Réinitialiser le contenu pour éviter les doublons
+  buttonFilter.innerHTML = "";
 
-  // Ajouter le bouton "Tous" dans le HTML
   const allBtn = document.createElement("button");
   allBtn.innerHTML = "Tous";
   allBtn.classList.add("filterBtn");
   buttonFilter.appendChild(allBtn);
 
-  // Ajouter un gestionnaire d'événements de clic au bouton "Tous"
   allBtn.addEventListener("click", () => {
-    filterWorksByCategoryId(); // Filtrer les travaux en affichant tous les travaux (aucun filtre)
+    filterWorksByCategoryId();
 
-    // Supprimer la classe "active" de tous les boutons
     const allButtons = document.querySelectorAll(".filterBtn");
     for (let i = 0; i < allButtons.length; i++) {
       allButtons[i].classList.remove("active");
     }
 
-    // Ajouter la classe "active" au bouton "Tous"
     allBtn.classList.add("active");
   });
 
-  // Parcourir les données des catégories et créer des boutons pour chaque catégorie
   for (let i = 0; i < categories.length; i++) {
     const category = categories[i];
     const btn = document.createElement("button");
@@ -78,38 +137,33 @@ function displayCategories() {
     btn.classList.add("filterBtn");
     buttonFilter.appendChild(btn);
 
-    // Ajouter un gestionnaire d'événements de clic à chaque bouton de catégorie
     btn.addEventListener("click", () => {
-      filterWorksByCategoryId(category.id); // Filtrer les travaux par catégorie en fonction de l'ID de la catégorie
+      filterWorksByCategoryId(category.id);
 
-      // Supprimer la classe "active" de tous les boutons
       const allButtons = document.querySelectorAll(".filterBtn");
       for (let j = 0; j < allButtons.length; j++) {
         allButtons[j].classList.remove("active");
       }
 
-      // Ajouter la classe "active" au bouton cliqué
       btn.classList.add("active");
     });
   }
 }
 
-// Fonction pour filtrer les travaux par categoryId
+// Filtrer les travaux par catégorie
 function filterWorksByCategoryId(categoryId) {
-  // Si categoryId est undefined, afficher tous les travaux (aucun filtre)
   if (categoryId === undefined) {
     works = originalWorks;
   } else {
-    // Filtrer les travaux pour n'afficher que ceux qui correspondent à la categoryId donnée
     works = originalWorks.filter((work) => work.categoryId === categoryId);
   }
-  displayWork(); // Afficher les travaux filtrés à l'écran
+  displayWork();
 }
 
-// Charger les données depuis l'API lors du chargement de la page
+// Chargement des données des travaux et vérif de la connexion
 loadWork();
 
-// Fonction pour vérifier l'état de connexion
+// Vérifier la connexion et activer --> mode édition actived
 function checkConnexion() {
   const token = sessionStorage.getItem("token");
   if (token !== null) {
@@ -119,7 +173,7 @@ function checkConnexion() {
   }
 }
 
-// function pour afficher le mode editeur
+// Activer le mode édition
 function barEdition() {
   const editionGlobal = document.querySelector("#editionBar");
   editionGlobal.classList.add("edition_global");
@@ -144,5 +198,6 @@ function barEdition() {
   modify2.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
   modify2.classList.add("modify2");
 }
-checkConnexion()
 
+// Vérification de la connexion au chargement de la page
+checkConnexion();

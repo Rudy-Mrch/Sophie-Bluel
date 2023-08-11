@@ -1,38 +1,32 @@
+// Sélection de l'élément formulaire de connexion
 let formLog = document.getElementById('formLog');
 formLog.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  // Récupérer les informations de connexion du formulaire
+  event.preventDefault(); // Empêche le rechargement de la page
+
+  // Récupération des champs email et mot de passe du formulaire
   const email = document.getElementById('mail').value;
   const password = document.getElementById('password').value;
-  
 
-  // Envoyer les informations de connexion à l'API pour authentification
+  // Envoi des informations de connexion à l'API pour authentification
   const response = await fetch("http://localhost:5678/api/users/login", {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ email, password }) // Convertit les données en format JSON
   });
 
-  if (response.status === 200) {
-    // Récupérer le jeton d'authentification depuis la réponse de l'API
+  // Vérification de la réponse de l'API
+  if (response.status === 200) { 
     const token = await response.json();
-    console.log(token) 
 
-    // Enregistrer le jeton d'authentification dans le stockage local
+    // Enregistrement du jeton d'authentification et de l'ID utilisateur dans le stockage de session
     sessionStorage.setItem("token", token.token);
     sessionStorage.setItem("userId", token.userId);
 
-    // Redirige l'utilisateur vers la page d'accueil  
+    // Redirection de l'utilisateur vers la page d'accueil
     window.location.href = "../index.html";
   } else {
-    // Afficher un message d'erreur si les informations de connexion sont invalides
-   alert("Nom d'utilisateur ou mot de pass incorrect");
+    alert("Nom d'utilisateur ou mot de passe incorrect");
   }
 });
-
-
-
-
-
