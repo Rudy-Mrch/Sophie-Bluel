@@ -36,13 +36,3 @@ formLog.addEventListener('submit', async (event) => {
 
 
 
-// Recommandations :
-// ● Pour réaliser cette étape, demandez-vous :
-// ○ Quel type de requête me permet d’envoyer les valeurs des entrées
-// de mon formulaire ?
-// ○ Si la combinaison utilisateur - mot de passe est correcte, comment
-// rediriger vers la page d’accueil et s’assurer que la configuration est
-// maintenue ?
-// ○ Si la combinaison est fausse, comment prévenir l’utilisateur ?
-
-

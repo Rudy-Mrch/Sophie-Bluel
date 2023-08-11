@@ -113,9 +113,9 @@ loadWork();
 function checkConnexion() {
   const token = sessionStorage.getItem("token");
   if (token !== null) {
-    alert("Mode éditeur activé");
+    barEdition();
   } else {
-    alert("Mode éditeur désactivé");
+    console.log("Mode éditeur désactivé");
   }
 }
 
@@ -144,4 +144,5 @@ function barEdition() {
   modify2.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
   modify2.classList.add("modify2");
 }
+checkConnexion()
 
