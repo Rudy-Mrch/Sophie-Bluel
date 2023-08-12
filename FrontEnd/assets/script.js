@@ -9,19 +9,21 @@ const modal2 = document.getElementById("modal2");
 const closeModal2Button = document.getElementById("closeModal2");
 const validatePhotoButton = document.getElementById("validatePhoto");
 
-// Clique sur pour ouvrir la première modale
+// Click sur pour ouvrir la première modale
 openModal1Button.addEventListener("click", () => {
   modal1.style.display = "block";
 });
 
-// Clique sur le bouton pour ajouter des photos (modal2)
+// Click sur le bouton pour ajouter des photos (modal2)
 addPhotosButton.addEventListener("click", () => {
   modal2.style.display = "block";
 });
 
-// Clique pour supprimer la galerie
+// click sur le bouton pour supprimer la galerie
 deleteGalleryButton.addEventListener("click", () => {
-   // A COMPLETERRRRRRRRRRRRR  POUR SUPPRIMER LA GALERIE !!!!!!!!!!!!!!!!!!!!!!!
+  const gallery = document.querySelector(".gallery");
+  gallery.innerHTML = "";
+  modal1.style.display = "none";
 });
 
 // Valider l'ajout de la photo
