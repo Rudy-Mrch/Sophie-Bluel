@@ -385,12 +385,20 @@ footer nav ul {
 	z-index: 9999;
 }
 
+.modal-title{
+	margin: 1em;
+	font-family:'Work Sans';
+	font-weight: 400;
+font-size: 26px;
+color: black;
+}
+
 .modal:target {
 	display: flex;
 }
 
 .modal-content {
-	top: 25%;
+	top: 8%;
 	background-color: white;
 	padding: 20px;
 	border-radius: 10px;
@@ -491,6 +499,13 @@ footer nav ul {
 	width: 420px;
 }
 
+.gallery-modal {
+	padding-top: 1em;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-gap: 20px;
+  }
+
 @keyframes fadeInUp {
 	from {
 		opacity: 0;
@@ -502,3 +517,66 @@ footer nav ul {
 		transform: translateY(0);
 	}
 }
+.containerPix{
+	background-color:#E8F1F6 ;
+	border-radius: 3px;
+	width: 420px;
+	height: 169px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.fa-image{
+	color: #B9C5CC;
+	font-size: 58px;
+	padding: 0.3em 0em 0.3em 0em;
+}
+
+
+#inputGhostButton{
+	display: none;
+}
+#buttonAddPix{
+	width: 173px;
+	height: 36px;
+	border-radius: 50px;
+	background-color: #cbd6dc;
+	color: #306685;
+	font-family:'Work Sans';
+	border: none;
+	font-weight: 500;
+	font-size:14px ;
+	cursor: pointer;
+}
+#buttonAddPix:hover{
+	background-color: #306685;
+	color: #cbd6dc;
+}
+
+.conditionPix{
+	margin-top: 10px;
+	color: #444;
+	text-align: center;
+	font-size: 10px;
+	font-family: 'Work Sans';
+}
+
+.word_edit{
+	font-size: 12px;
+	text-align: start;
+}
+.word_edit:hover{
+	color: #B1663C;
+cursor: pointer;
+}
+
+.fa-trash-can {
+  color: white; 
+  background-color: black; 
+  padding: 4px; 
+  position: relative;
+bottom: 75%;
+left: -25%;
+cursor: pointer;
+}
+

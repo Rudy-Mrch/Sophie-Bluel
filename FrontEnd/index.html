@@ -90,7 +90,7 @@
 	<div id="modal1" class="modal">
 		<div class="modal-content">
 			<h2 class="modal-title">Galerie photo</h2>
-			<p class="modal-text">Endroit où il y a les photos</p>
+			<div class="gallery-modal"></div>
 			<span class="modal-close" id="closeModal1">&times;</span>
 			<div class="line"></div>
 			<button id="addPhotos">Ajouter des photos</button>
@@ -105,7 +105,13 @@
 			<h2 class="modal-title">Ajout photo</h2>
 			<div class="arrowBack" id="arrowBack">&#8592</div>
 			<span class="modal-close" id="closeModal2">&times;</span>
-			<p class="modal-text">Endroit où il y a les photos</p>
+			
+			<div class="containerPix">
+				<i class="fa-solid fa-image"></i>
+				<input type="file" id="inputGhostButton">
+			<button id="buttonAddPix"> + Ajouter photo </button>
+		<p class="conditionPix">jpn, png : 4mo max</p>
+		</div>
 			<div class="selector_modals">
 				<!-- Formulaire pour ajouter une nouvelle photo -->
 				<div class="input-container">

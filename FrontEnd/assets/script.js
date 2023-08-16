@@ -8,7 +8,20 @@ const deleteGalleryButton = document.getElementById("deleteGallery");
 const modal2 = document.getElementById("modal2");
 const closeModal2Button = document.getElementById("closeModal2");
 const validatePhotoButton = document.getElementById("validatePhoto");
+const formData = new FormData();
+const validateButton = document.querySelector("#validatePhoto");
 
+async function createWorks() {
+  const token = sessionStorage.getItem("token");
+  const response = await fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    headers: {
+      Accept: "application/json;charset=utf-8",
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+}
 // Click sur pour ouvrir la première modale
 openModal1Button.addEventListener("click", () => {
   modal1.style.display = "block";
@@ -17,6 +30,24 @@ openModal1Button.addEventListener("click", () => {
 // Click sur le bouton pour ajouter des photos (modal2)
 addPhotosButton.addEventListener("click", () => {
   modal2.style.display = "block";
+  validateButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    const inputTittle = document.querySelector("#inputTittle").value;
+    formData.append("title", inputTittle);
+
+    const selectorCategory = document.querySelector("#selectorCategory").value;
+    formData.append("category", selectorCategory);
+    createWorks();
+  });
+
+  document.querySelector("#buttonAddPix").addEventListener("click", () => {
+    const inputGhost = document.querySelector("#inputGhostButton");
+    inputGhost.click();
+    inputGhost.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      formData.append("image", file);
+    });
+  });
 });
 
 // click sur le bouton pour supprimer la galerie
@@ -24,11 +55,6 @@ deleteGalleryButton.addEventListener("click", () => {
   const gallery = document.querySelector(".gallery");
   gallery.innerHTML = "";
   modal1.style.display = "none";
-});
-
-// Valider l'ajout de la photo
-validatePhotoButton.addEventListener("click", () => {
-  // A COMPLETERRRRRRRRRRRRR  POUR VALIDER LA PHOTO !!!!!!!!!!!!!!!!!!!!!!!
 });
 
 // Fermeture de la modal1
@@ -82,23 +108,51 @@ function loadWork() {
     });
 }
 
-// Afficher les travaux dans la galerie
 function displayWork() {
   const gallery = document.querySelector(".gallery");
+  const galleryModal = document.querySelector(".gallery-modal");
+
   gallery.innerHTML = "";
+  galleryModal.innerHTML = "";
 
   for (let i = 0; i < works.length; i++) {
     const work = works[i];
+
+    // Crée l'élément d'image pour la galerie
     const fig = document.createElement("figure");
     const imageS = document.createElement("img");
     imageS.src = work.imageUrl;
     imageS.alt = work.title;
-    const figcap = document.createElement("figcaption");
-    figcap.innerHTML = work.title;
     fig.appendChild(imageS);
-    fig.appendChild(figcap);
+
+    // Ajoute l'image à la galerie
     gallery.appendChild(fig);
+
+    // Crée l'élément de conteneur pour l'image dans la modal1
+    const modalImageContainer = document.createElement("div");
+    modalImageContainer.classList.add("modal-image-container");
+
+    const imageModal = document.createElement("img");
+    imageModal.src = work.imageUrl;
+    imageModal.alt = work.title;
+    imageModal.style.width = "78.123px";
+    imageModal.style.height = "104.08px";
+    modalImageContainer.appendChild(imageModal);
+
+    // Crée l'élément <i> pour le symbole de la corbeille (trash) dans la modal1
+    const trashIcon = document.createElement("i");
+    trashIcon.classList.add("fa-solid", "fa-trash-can");
+    modalImageContainer.appendChild(trashIcon);
+    galleryModal.appendChild(modalImageContainer);
+    trashIcon.addEventListener("click", () => {
+      delework(i);
+    });
   }
+}
+
+function delework(i) {
+  works.splice(i, 1);
+  displayWork();
 }
 
 // Charger les catégories depuis l'API
@@ -108,6 +162,7 @@ function loadCategories() {
     .then((categoriesData) => {
       categories = categoriesData;
       displayCategories();
+      populateCategories();
     });
 }
 
@@ -199,6 +254,24 @@ function barEdition() {
   const modify2 = document.querySelector("#modify2");
   modify2.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
   modify2.classList.add("modify2");
+}
+
+// Fonction pour afficher les catégories dans le sélecteur de la modal2
+function populateCategories() {
+  const selectorCategory = document.getElementById("selectorCategory");
+
+  // Parcours du tableau de catégories
+  for (let i = 0; i < categories.length; i++) {
+    const category = categories[i];
+
+    // Création de l'élément d'option
+    const option = document.createElement("option");
+    option.value = category.id;
+    option.textContent = category.name;
+
+    // Ajout de l'option au sélecteur
+    selectorCategory.appendChild(option);
+  }
 }
 
 // Vérification de la connexion au chargement de la page
