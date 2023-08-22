@@ -1,4 +1,4 @@
-// Récupération des éléments du DOM
+// Sélection des éléments HTML
 const openModal1Button = document.getElementById("modify2");
 const modal1 = document.getElementById("modal1");
 const closeModal1Button = document.getElementById("closeModal1");
@@ -25,6 +25,7 @@ async function createWorks() {
   });
 }
 
+// Fonction asynchrone pour supprimer une œuvre par son ID
 async function deleteWorks(id) {
   const token = sessionStorage.getItem("token");
   const response = await fetch("http://localhost:5678/api/works/" + id, {
@@ -40,16 +41,16 @@ async function deleteWorks(id) {
   }
 }
 
-// Événement d'écoute pour ouvrir la première modal
+// Événement pour ouvrir la première modal
 openModal1Button.addEventListener("click", () => {
   modal1.style.display = "block";
 });
 
-// Événement d'écoute pour ouvrir la deuxième modal et gérer l'ajout de photos
+// Événements pour la deuxième modal (ajout de photos)
 addPhotosButton.addEventListener("click", () => {
   modal2.style.display = "block";
 
-  // Validation lors du clic sur le bouton "Valider"
+  // Événement pour valider une photo
   validateButton.addEventListener("click", (event) => {
     event.preventDefault();
     const inputTittle = document.querySelector("#inputTittle").value;
@@ -60,7 +61,7 @@ addPhotosButton.addEventListener("click", () => {
     createWorks();
   });
 
-  // Sélection et affichage de l'image à ajouter
+  // Événement pour ajouter une photo depuis l'input de fichier
   document.querySelector("#buttonAddPix").addEventListener("click", () => {
     const inputGhost = document.querySelector("#inputGhostButton");
     inputGhost.click();
@@ -79,53 +80,47 @@ addPhotosButton.addEventListener("click", () => {
   });
 });
 
-// Événement d'écoute pour supprimer la galerie
+// Événements pour la première modal (suppression de galerie)
 deleteGalleryButton.addEventListener("click", () => {
   const gallery = document.querySelector(".gallery");
   gallery.innerHTML = "";
   modal1.style.display = "none";
 });
 
-// Fermeture de la première modal
 closeModal1Button.addEventListener("click", () => {
   modal1.style.display = "none";
 });
 
-// Fermeture de la deuxième modal
 closeModal2Button.addEventListener("click", () => {
   modal2.style.display = "none";
 });
 
-// Fermeture de la première modal lors d'un clic à l'extérieur
 modal1.addEventListener("click", (event) => {
   if (event.target === modal1) {
     modal1.style.display = "none";
   }
 });
 
-// Fermeture de la deuxième modal lors d'un clic à l'extérieur
 modal2.addEventListener("click", (event) => {
   if (event.target === modal2) {
     modal2.style.display = "none";
   }
 });
 
-// Retour à la première modal depuis la deuxième
+// Événement pour revenir de la deuxième modal à la première
 const arrowBackButton = document.getElementById("arrowBack");
 arrowBackButton.addEventListener("click", () => {
   modal2.style.display = "none";
   modal1.style.display = "block";
 });
 
-// URL de base pour les requêtes API
 const root = "http://localhost:5678/api";
 
-// Tableaux pour stocker les œuvres, catégories et œuvres originales
 let works = [];
 let categories = [];
 let originalWorks = [];
 
-// Chargement des œuvres
+// Fonction pour charger les œuvres depuis l'API
 function loadWork() {
   fetch(root + "/works")
     .then((response) => response.json())
@@ -137,7 +132,7 @@ function loadWork() {
     });
 }
 
-// Affichage des œuvres dans la galerie
+// Fonction pour afficher les œuvres dans la galerie
 function displayWork() {
   const gallery = document.querySelector(".gallery");
   const galleryModal = document.querySelector(".gallery-modal");
@@ -152,7 +147,12 @@ function displayWork() {
     const imageS = document.createElement("img");
     imageS.src = work.imageUrl;
     imageS.alt = work.title;
+
+    const figcaption = document.createElement("figcaption");
+    figcaption.textContent = work.title;
+
     fig.appendChild(imageS);
+    fig.appendChild(figcaption);
 
     gallery.appendChild(fig);
 
@@ -171,7 +171,6 @@ function displayWork() {
     modalImageContainer.appendChild(trashIcon);
     galleryModal.appendChild(modalImageContainer);
 
-    // Suppression d'une œuvre
     trashIcon.addEventListener("click", () => {
       deleteWorks(work.id);
       delework(i);
@@ -179,13 +178,13 @@ function displayWork() {
   }
 }
 
-// Suppression d'une œuvre
+// Fonction pour supprimer une œuvre de la liste
 function delework(i) {
   works.splice(i, 1);
   displayWork();
 }
 
-// Chargement des catégories
+// Fonction pour charger les catégories depuis l'API
 function loadCategories() {
   fetch(root + "/categories")
     .then((response) => response.json())
@@ -196,7 +195,7 @@ function loadCategories() {
     });
 }
 
-// Affichage des catégories pour filtrer les œuvres
+// Fonction pour afficher les catégories
 function displayCategories() {
   const buttonFilter = document.querySelector(".buttonFilter");
   buttonFilter.innerHTML = "";
@@ -207,7 +206,6 @@ function displayCategories() {
   allBtn.classList.add("filterBtn");
   buttonFilter.appendChild(allBtn);
 
-  // Écouteur pour le bouton "Tous"
   allBtn.addEventListener("click", () => {
     filterWorksByCategoryId();
 
@@ -226,7 +224,6 @@ function displayCategories() {
     btn.classList.add("filterBtn");
     buttonFilter.appendChild(btn);
 
-    // Écouteur pour chaque bouton de catégorie
     btn.addEventListener("click", () => {
       filterWorksByCategoryId(category.id);
 
@@ -240,7 +237,7 @@ function displayCategories() {
   }
 }
 
-// Filtrer les œuvres par ID de catégorie
+// Fonction pour filtrer les œuvres par catégorie
 function filterWorksByCategoryId(categoryId) {
   if (categoryId === undefined) {
     works = originalWorks;
@@ -250,10 +247,10 @@ function filterWorksByCategoryId(categoryId) {
   displayWork();
 }
 
-// Chargement initial
+// Chargement initial des œuvres et des catégories
 loadWork();
 
-// Vérifier la connexion et afficher la barre d'édition si nécessaire
+// Fonction pour vérifier la connexion de l'utilisateur
 function checkConnexion() {
   const token = sessionStorage.getItem("token");
   if (token !== null) {
@@ -263,7 +260,7 @@ function checkConnexion() {
   }
 }
 
-// Afficher la barre d'édition
+// Fonction pour activer la barre d'édition
 function barEdition() {
   const editionGlobal = document.querySelector("#editionBar");
   editionGlobal.classList.add("edition_global");
@@ -289,7 +286,7 @@ function barEdition() {
   modify2.classList.add("modify2");
 }
 
-// Remplir la liste déroulante des catégories
+// Fonction pour peupler la liste de catégories dans le formulaire
 function populateCategories() {
   const selectorCategory = document.getElementById("selectorCategory");
 
@@ -302,5 +299,5 @@ function populateCategories() {
   }
 }
 
-// Vérifier la connexion à l'initialisation
+// Vérifier la connexion de l'utilisateur lors du chargement de la page
 checkConnexion();
