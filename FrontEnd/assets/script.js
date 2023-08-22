@@ -25,6 +25,21 @@ async function createWorks() {
   });
 }
 
+async function deleteWorks(id) {
+  const token = sessionStorage.getItem("token");
+  const response = await fetch("http://localhost:5678/api/works/" + id, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json;charset=utf-8",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    works = works.filter((work) => work.id !== id);
+    displayWork();
+  }
+}
+
 // Événement d'écoute pour ouvrir la première modal
 openModal1Button.addEventListener("click", () => {
   modal1.style.display = "block";
@@ -33,7 +48,7 @@ openModal1Button.addEventListener("click", () => {
 // Événement d'écoute pour ouvrir la deuxième modal et gérer l'ajout de photos
 addPhotosButton.addEventListener("click", () => {
   modal2.style.display = "block";
-  
+
   // Validation lors du clic sur le bouton "Valider"
   validateButton.addEventListener("click", (event) => {
     event.preventDefault();
@@ -57,8 +72,8 @@ addPhotosButton.addEventListener("click", () => {
       const uploadedImage = document.createElement("img");
       uploadedImage.src = URL.createObjectURL(file);
       uploadedImage.alt = "Uploaded Image";
-      uploadedImage.style.width= "129px";
-      uploadedImage.style.height= "193px";
+      uploadedImage.style.width = "129px";
+      uploadedImage.style.height = "193px";
       containerPix.appendChild(uploadedImage);
     });
   });
@@ -158,6 +173,7 @@ function displayWork() {
 
     // Suppression d'une œuvre
     trashIcon.addEventListener("click", () => {
+      deleteWorks(work.id);
       delework(i);
     });
   }
