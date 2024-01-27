@@ -1,5 +1,5 @@
 [build]
   base = "Backend"
   command = "npm install"
-  publish = "Backend"
+  publish = "FrontEnd"
   functions = "netlify/functions"
